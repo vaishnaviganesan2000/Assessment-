@@ -1,0 +1,66 @@
+import java.util.*;
+
+public class MaximalNetworkRank {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Input for n
+        System.out.print("Enter the number of labs (n): ");
+        int n = scanner.nextInt();
+
+        // Input for cables
+        System.out.print("Enter the number of cables: ");
+        int numCables = scanner.nextInt();
+
+        int[][] cables = new int[numCables][2];
+        System.out.println("Enter the cables (one per line, in the format [ai bi]): ");
+        for (int i = 0; i < numCables; i++) {
+            cables[i][0] = scanner.nextInt();
+            cables[i][1] = scanner.nextInt();
+        }
+
+        // Calculate the maximal network rank
+        int[] rank = new int[n];
+        for (int i = 0; i < numCables; i++) {
+            rank[cables[i][0]]++;
+            rank[cables[i][1]]++;
+        }
+
+        int maxRank = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int curRank = rank[i] + rank[j];
+                if (containsCable(cables, i, j)) {
+                    curRank--;
+                }
+                maxRank = Math.max(maxRank, curRank);
+            }
+        }
+
+        // Output the maximal network rank
+        System.out.println(maxRank);
+
+        scanner.close();
+    }
+
+    private static boolean containsCable(int[][] cables, int i, int j) {
+        for (int k = 0; k < cables.length; k++) {
+            if ((cables[k][0] == i && cables[k][1] == j) || (cables[k][0] == j && cables[k][1] == i)) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+
+INPUT:
+Enter the number of labs (n): 4
+Enter the number of cables: 
+4
+Enter the cables (one per line, in the format [ai bi]): 
+0 3
+1 2
+1 3
+0 1
+4
